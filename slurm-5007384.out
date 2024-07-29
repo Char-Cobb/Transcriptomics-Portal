@@ -1,0 +1,11 @@
+mkdir: cannot create directory ‘/hpfs/userws/cobbc07/NCBI_files/GSE64598’: File exists
+GSE64598
+mkdir /hpfs/userws/cobbc07/NCBI_files/GSE64598
+Traceback (most recent call last):
+  File "geo_data.py", line 67, in <module>
+    download.getGEOfiles(args[1], args[2])
+  File "geo_data.py", line 30, in getGEOfiles
+    subprocess.run(cmd, shell=True, check=True)
+  File "/usr/lib64/python3.6/subprocess.py", line 438, in run
+    output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command 'mkdir /hpfs/userws/cobbc07/NCBI_files/GSE64598' returned non-zero exit status 1.
