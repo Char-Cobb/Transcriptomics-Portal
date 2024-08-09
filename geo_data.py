@@ -25,33 +25,39 @@ class downloadNCBIFiles:
         root_path = root_path
         count = 0
         for i in accList:
-            cmd = "mkdir " + root_path + "/{i}".format(i=i)
-            print(cmd)
-            subprocess.run(cmd, shell=True, check=True)
+            dir_path = root_path + "/{i}".format(i=i)
+            
+            #check to see if the directory exsists. If it does, contiune to next iteration
+            if os.path.isdir(dir_path):
+                continue
+            else:
+                cmd = "mkdir " + root_path + "/{i}".format(i=i)
+                print(cmd)
+                subprocess.run(cmd, shell=True, check=True)
 
-            #get RNA-seq raw counts matrix
-            url = "https://www.ncbi.nlm.nih.gov/geo/download/?type=rnaseq_counts&acc={i}&format=file&file={i}_raw_counts_GRCh38.p13_NCBI.tsv.gz"
-            get = requests.get(url.format(i=i), allow_redirects=True)
-            if get.status_code == 200:
-                with open('{root}/{i}/{i}_raw_counts_GRCh38.p13_NCBI.tsv.gz'.format(i=i, root=root_path), 'wb') as f:
-                    f.write(get.content)
-                    f.close()
+                #get RNA-seq raw counts matrix
+                url = "https://www.ncbi.nlm.nih.gov/geo/download/?type=rnaseq_counts&acc={i}&format=file&file={i}_raw_counts_GRCh38.p13_NCBI.tsv.gz"
+                get = requests.get(url.format(i=i), allow_redirects=True)
+                if get.status_code == 200:
+                    with open('{root}/{i}/{i}_raw_counts_GRCh38.p13_NCBI.tsv.gz'.format(i=i, root=root_path), 'wb') as f:
+                        f.write(get.content)
+                        f.close()
 
-            #get RNA-seq normalized counts matrix - FPKM
-            url = "https://www.ncbi.nlm.nih.gov/geo/download/?type=rnaseq_counts&acc={i}&format=file&file={i}_norm_counts_FPKM_GRCh38.p13_NCBI.tsv.gz"
-            get = requests.get(url.format(i=i), allow_redirects=True)
-            if get.status_code == 200:
-                with open('{root}/{i}/{i}_norm_counts_FPKM_GRCh38.p13_NCBI.tsv.gz'.format(i=i, root=root_path), 'wb') as f:
-                    f.write(get.content)
-                    f.close()
+                #get RNA-seq normalized counts matrix - FPKM
+                url = "https://www.ncbi.nlm.nih.gov/geo/download/?type=rnaseq_counts&acc={i}&format=file&file={i}_norm_counts_FPKM_GRCh38.p13_NCBI.tsv.gz"
+                get = requests.get(url.format(i=i), allow_redirects=True)
+                if get.status_code == 200:
+                    with open('{root}/{i}/{i}_norm_counts_FPKM_GRCh38.p13_NCBI.tsv.gz'.format(i=i, root=root_path), 'wb') as f:
+                        f.write(get.content)
+                        f.close()
 
-            #get RNA-seq normalized counts matrix - TPM
-            url = "https://www.ncbi.nlm.nih.gov/geo/download/?type=rnaseq_counts&acc={i}&format=file&file={i}_norm_counts_TPM_GRCh38.p13_NCBI.tsv.gz"           
-            get = requests.get(url.format(i=i), allow_redirects=True)
-            if get.status_code == 200:
-                with open('{root}/{i}/{i}_norm_counts_TPM_GRCh38.p13_NCBI.tsv.gz'.format(i=i, root=root_path), 'wb') as f:
-                    f.write(get.content)
-                    f.close()
+                #get RNA-seq normalized counts matrix - TPM
+                url = "https://www.ncbi.nlm.nih.gov/geo/download/?type=rnaseq_counts&acc={i}&format=file&file={i}_norm_counts_TPM_GRCh38.p13_NCBI.tsv.gz"           
+                get = requests.get(url.format(i=i), allow_redirects=True)
+                if get.status_code == 200:
+                    with open('{root}/{i}/{i}_norm_counts_TPM_GRCh38.p13_NCBI.tsv.gz'.format(i=i, root=root_path), 'wb') as f:
+                        f.write(get.content)
+                        f.close()
 
             
         return("Job is done!")
@@ -66,4 +72,5 @@ if __name__ == '__main__':
     download = downloadNCBIFiles()
     download.getGEOfiles(args[1], args[2])
 
-
+#sbatch command:
+#sbatch geo_data.sh /hpfs/userws/cobbc07/NCBI_files/test_rnaseq_counts.txt /hpfs/userws/cobbc07/NCBI_docs
